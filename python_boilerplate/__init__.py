@@ -8,5 +8,5 @@ def main(a: int, b: int) -> int:
     if a == 1:
         b = b + 1
     else:
-        pass
+        b = b - 1
     return a + b

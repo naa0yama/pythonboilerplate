@@ -5,8 +5,12 @@ import python_boilerplate
 
 
 # %%
-def test_ok_sample() -> None:
+def test_main_a_true() -> None:
     """A test_ok_sample."""
-    result = python_boilerplate.main(1, 2)
-    if result == 4:
-        assert 4 == result
+    assert 4 == python_boilerplate.main(1, 2)
+
+
+# %%
+def test_main_a_false() -> None:
+    """A test_ok_sample."""
+    assert 2 == python_boilerplate.main(2, 1)
