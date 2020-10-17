@@ -1,12 +1,12 @@
-# python-boilerplate
+# python_boilerplate
 
-[![codecov](https://codecov.io/gh/naa0yama/python-boilerplate/branch/main/graph/badge.svg?token=D8YU7EYIYZ)](https://codecov.io/gh/naa0yama/python-boilerplate)
+[![codecov](https://codecov.io/gh/naa0yama/python_boilerplate/branch/main/graph/badge.svg?token=D8YU7EYIYZ)](https://codecov.io/gh/naa0yama/python_boilerplate)
 
 Python で開発する時用ボイラープレート
 
 ## TOC
 
-- [python-boilerplate](#python-boilerplate)
+- [python_boilerplate](#python_boilerplate)
   - [TOC](#toc)
   - [pyenv インストール](#pyenv-インストール)
   - [poetry](#poetry)
