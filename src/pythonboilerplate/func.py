@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""python_boilerplate."""
+"""pythonboilerplate."""
 
 
 # %%
