@@ -57,5 +57,5 @@ minversion = "6.0"
 addopts    = "-r sfp --verbose --verbose --durations=0 --cov=tests --cov=python_boilerplate --cov-report=term --cov-report=term-missing --cov-report=term-missing --cov-report=xml"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
