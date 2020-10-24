@@ -42,6 +42,15 @@
   "python.testing.nosetestsEnabled": false,
   "python.testing.pytestEnabled": true,
   /*****************************************************************************
+   * Python の設定 mypy
+   ****************************************************************************/
+  "python.linting.mypyArgs": [],
+  "python.linting.mypyCategorySeverity.error": "Error",
+  "python.linting.mypyCategorySeverity.note": "Information",
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyPath": "mypy",
+  /****************************************************************************/
+  /*****************************************************************************
    * プロジェクト 参加者には 拡張機能をおすすめする false でおすすめ
    ****************************************************************************/
   "extensions.showRecommendationsOnlyOnDemand": false
