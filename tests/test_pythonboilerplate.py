@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
+# To add a new cell, type '# %%'
+# To add a new markdown cell, type '# %% [markdown]'
+# %%
 """pythonboilerplate."""
 # %%
-from src.pythonboilerplate.func import main
+from src.pythonboilerplate import __version__
 
 
-# %%
-def test_main_a_true() -> None:
-    """A test_ok_sample."""
-    assert 4 == main(1, 2)
-
-
-# %%
-def test_main_a_false() -> None:
-    """A test_ok_sample."""
-    assert 2 == main(2, 1)
+def test_version() -> None:
+    """Test version."""
+    assert __version__ == "0.1.0"
