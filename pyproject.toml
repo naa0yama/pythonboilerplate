@@ -67,7 +67,7 @@ addopts                    = [
     "--verbose",
     "--verbose",
     "--durations=0",
-    "--cov=src/pythonboilerplate",
+    "--cov=src",
     "--cov=tests",
     "--cov-report=term",
     "--cov-report=term-missing",
