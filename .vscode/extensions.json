@@ -3,10 +3,8 @@
     "esbenp.prettier-vscode",
     "ms-python.python",
     "njpwerner.autodocstring",
-    "satokaz.vscode-bs-ctrlchar-remover",
     "bungcip.better-toml",
     "eamodio.gitlens",
-    "ryanluker.vscode-coverage-gutters",
     "oderwat.indent-rainbow"
   ]
 }
