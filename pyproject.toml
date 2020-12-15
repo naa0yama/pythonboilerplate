@@ -33,7 +33,7 @@ jupyter                    = "^1.0.0"
 jupyter-client             = "6.1.7"
 mypy                       = "^0.790"
 pip                        = "^20.0.2"
-pytest                     = "^6.1.2"
+pytest                     = "^6.2.1"
 pytest-cov                 = "^2.10.1"
 tox                        = "^3.20.1"
 
