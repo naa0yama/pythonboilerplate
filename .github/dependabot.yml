@@ -1,12 +1,19 @@
 version: 2
 updates:
-- package-ecosystem: pip
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "20:00"
-  open-pull-requests-limit: 10
-  reviewers:
-  - naa0yama
-  assignees:
-  - naa0yama
+  - package-ecosystem: pip
+    directory: "/"
+    schedule: &schedule
+      interval: daily
+      time: "03:00"
+      # 日本標準時 (UTC +09:00) を使用する
+      timezone: "Asia/Tokyo"
+  # GitHub アクションの依存関係を維持する
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: *schedule
+
+    open-pull-requests-limit: 10
+    reviewers:
+      - naa0yama
+    assignees:
+      - naa0yama
