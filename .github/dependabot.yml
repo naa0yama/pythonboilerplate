@@ -7,6 +7,11 @@ updates:
       time: "03:00"
       # 日本標準時 (UTC +09:00) を使用する
       timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 10
+    reviewers:
+      - naa0yama
+    assignees:
+      - naa0yama
 
     # GitHub アクションの依存関係を維持する
   - package-ecosystem: "github-actions"
@@ -16,7 +21,6 @@ updates:
       time: "03:00"
       # 日本標準時 (UTC +09:00) を使用する
       timezone: "Asia/Tokyo"
-
     open-pull-requests-limit: 10
     reviewers:
       - naa0yama
