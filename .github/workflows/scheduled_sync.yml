@@ -76,9 +76,7 @@ jobs:
                                 # to fetch all git depth right from the start)
 
           # Add the repo which you forked to the remote and name it as "upstream"
-          pwd
           git clone ${REPO_FORK} ./upstream
-          ls -lah
 
       - name: pyproject.toml merge generate
         run: |
@@ -88,10 +86,11 @@ jobs:
         run: |
           set -x
 
+          git checkout -b upstream-config-merge
           git add -N pyproject.toml # 新規ファイルを含める
           if ! git diff --exit-code --quiet
           then
             git add pyproject.toml
             git commit -m "Update"
-            git push
+            git push -u origin upstream-config-merge
           fi
