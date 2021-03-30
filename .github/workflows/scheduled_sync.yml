@@ -50,8 +50,8 @@ jobs:
         id: python_cache_id
         uses: actions/cache@v2
         with:
-          path: ~/.cache/pip
-          key: python-v${{ matrix.python-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/.github/workflows/poetry.lock')) }}
+          path: ${{ env.pythonLocation }}
+          key: python-${{ env.pythonLocation }}-v${{ matrix.python-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/.github/workflows/poetry.lock')) }}
 
       - name: Install requirements
         if: steps.python_cache_id.outputs.cache-hit != 'true'
