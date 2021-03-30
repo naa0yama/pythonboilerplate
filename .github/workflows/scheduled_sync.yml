@@ -22,6 +22,8 @@ on:
     #         * * * * *
     - cron: '*/10 * * * *'
 
+  workflow_dispatch:
+
 jobs:
   merge:
     runs-on: ubuntu-latest
