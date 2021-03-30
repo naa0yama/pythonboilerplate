@@ -36,6 +36,7 @@ pytest                     = "~6.2.2"
 pytest-cov                 = "~2.11.1"
 tox                        = "~3.23.0"
 
+
 [tool.black]
 line-length                = 99
 exclude                    = '''
@@ -48,16 +49,19 @@ exclude                    = '''
 )
 '''
 
+
 [tool.coverage]
 [tool.coverage.run]
 branch                     = true
 command_line               = "-m pytest"
+
 
 [tool.isort]
 include_trailing_comma     = true
 line_length                = 99
 force_single_line          = true
 force_sort_within_sections = true
+
 
 [tool.pytest]
 [tool.pytest.ini_options]
@@ -74,6 +78,7 @@ addopts                    = [
     "--cov-report=term-missing",
     "--cov-report=xml"
 ]
+
 
 [build-system]
 requires                   = [
