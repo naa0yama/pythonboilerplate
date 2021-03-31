@@ -50,8 +50,13 @@ jobs:
         id: python_cache_id
         uses: actions/cache@v2
         with:
+<<<<<<< HEAD:.github/workflows/projmr/scheduled_sync.yml
           path: ~/.cache/pip
           key: python-v${{ matrix.python-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/.github/workflows/projmr/poetry.lock')) }}
+=======
+          path: ${{ env.pythonLocation }}
+          key: python-${{ env.pythonLocation }}-v${{ matrix.python-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/.github/workflows/poetry.lock')) }}
+>>>>>>> main:.github/workflows/scheduled_sync.yml
 
       - name: Install requirements
         if: steps.python_cache_id.outputs.cache-hit != 'true'

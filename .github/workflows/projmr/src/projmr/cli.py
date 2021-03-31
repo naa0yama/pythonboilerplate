@@ -50,7 +50,11 @@ def main() -> None:
             logging.debug(json.dumps(dict_toml_origin, indent=4))
 
         dict_toml_origin["tool"]["poetry"].update(
-            {"dev-dependencies": dict_toml_upstream["tool"]["poetry"]["dev-dependencies"]},
+            {
+                "dev-dependencies": dict_toml_upstream["tool"]["poetry"][
+                    "dev-dependencies"
+                ],
+            },
         )
         logging.info("merged: tool.poetry.dev-dependencies ...")
 
