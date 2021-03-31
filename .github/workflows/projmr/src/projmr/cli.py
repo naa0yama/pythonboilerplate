@@ -36,10 +36,9 @@ def main() -> None:
     args = get_args()
 
     if hasattr(args, "upstreamfile"):
-        upstream_file = open(args.upstreamfile, "r")
-        upstream_contents = upstream_file.read()
-        dict_toml_upstream = loads(upstream_contents)
-        upstream_file.close()
+        with open(args.upstreamfile) as f:
+            upstream_contents = f.read()
+            dict_toml_upstream = loads(upstream_contents)
 
         # print(json.dumps(dict_toml_upstream, indent=4))
 
@@ -51,9 +50,7 @@ def main() -> None:
 
         dict_toml_origin["tool"]["poetry"].update(
             {
-                "dev-dependencies": dict_toml_upstream["tool"]["poetry"][
-                    "dev-dependencies"
-                ],
+                "dev-dependencies": dict_toml_upstream["tool"]["poetry"]["dev-dependencies"],
             },
         )
         logging.info("merged: tool.poetry.dev-dependencies ...")
