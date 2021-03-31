@@ -14,7 +14,7 @@ from tomlkit import parse as loads
 logging.basicConfig(
     format="%(asctime)s %(levelname)-6s\t%(filename)-18s\t%(funcName)-12s\t%(message)s",
     datefmt="%Y-%m-%dT%H:%M:%S%z",
-    level=logging.INFO,
+    level=logging.DEBUG,
 )
 
 
@@ -45,7 +45,7 @@ def main() -> None:
 
         dict_toml_origin: dict = {}
 
-        with open("pyproject.toml", "r") as f:
+        with open(args.originfile, "r") as f:
             dict_toml_origin = loads(f.read())
             logging.debug(json.dumps(dict_toml_origin, indent=4))
 
@@ -70,14 +70,14 @@ def main() -> None:
         )
         logging.info("merged: tool.pytest.ini_options ...")
 
-        for key2 in ["black", "isort"]:
+        for key2 in ["black", "isort", "projmrcli"]:
             dict_toml_origin["tool"].update({key2: dict_toml_upstream["tool"][key2]})
             logging.debug(json.dumps(dict_toml_origin, indent=4))
             logging.info("merged: " + key2 + " ...")
 
         logging.debug(json.dumps(dict_toml_origin, indent=4))
 
-        with open("pyproject.toml", "w") as f:
+        with open(args.originfile, "w") as f:
             f.write(dumps(dict_toml_origin))
         logging.info("file write.")
 
