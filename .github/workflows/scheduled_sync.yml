@@ -82,7 +82,7 @@ jobs:
 
       - name: pyproject.toml merge generate
         run: |
-          projmrcli "./${SOURCE_DIR_NAME}/pyproject.toml" pyproject.toml
+          projmrcli "./${SOURCE_DIR_NAME}/pyproject.toml"
 
       - name: commit & push
         run: |
