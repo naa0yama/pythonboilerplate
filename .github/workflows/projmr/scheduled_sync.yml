@@ -6,21 +6,21 @@ name: Merge upstream branches
 # Triggers the action as scheduled
 on:
   # Runs on 10 minutes past every hour
-  schedule:
-    # Ref:
-    #   - https://help.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events-schedule
-    #   - https://crontab.guru/examples.html
-    # Cron format:
-    #         ┌───────────── minute (0 - 59)
-    #         │ ┌───────────── hour (0 - 23)
-    #         │ │ ┌───────────── day of the month (1 - 31)
-    #         │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
-    #         │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
-    #         │ │ │ │ │
-    #         │ │ │ │ │
-    #         │ │ │ │ │
-    #         * * * * *
-    - cron: '10 */1 * * *'
+  #schedule:
+  #   Ref:
+  #   - https://help.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events-schedule
+  #   - https://crontab.guru/examples.html
+  #   Cron format:
+  #         ┌───────────── minute (0 - 59)
+  #         │ ┌───────────── hour (0 - 23)
+  #         │ │ ┌───────────── day of the month (1 - 31)
+  #         │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+  #         │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+  #         │ │ │ │ │
+  #         │ │ │ │ │
+  #         │ │ │ │ │
+  #         * * * * *
+  #- cron: '10 */1 * * *'
 
   workflow_dispatch:
 
@@ -35,9 +35,11 @@ jobs:
     env:
       OS: ubuntu-latest
       PYTHON: ${{ matrix.python-version }}
-      NAME: github-actions
-      EMAIL: github-actions@github.com
+      NAME: GitHub Action
+      EMAIL: action@github.com
       REPO_FORK: https://github.com/naa0yama/pythonboilerplate.git
+      BRUNCH_NAME: upstream-config-merge
+      SOURCE_DIR_NAME: upstream
 
     steps:
       - uses: actions/checkout@v2
@@ -56,7 +58,7 @@ jobs:
       - name: Install requirements
         if: steps.python_cache_id.outputs.cache-hit != 'true'
         run: |
-          cd ${{ github.workspace }}/.github/workflows
+          cd ${{ github.workspace }}/.github/workflows/projmr
           pip install .
 
       - name: git clone upstream
@@ -76,11 +78,11 @@ jobs:
                                 # to fetch all git depth right from the start)
 
           # Add the repo which you forked to the remote and name it as "upstream"
-          git clone ${REPO_FORK} ./upstream
+          git clone "${REPO_FORK}" "./${SOURCE_DIR_NAME}"
 
       - name: pyproject.toml merge generate
         run: |
-          projmrcli ./upstream/pyproject.toml pyproject.toml
+          projmrcli "./${SOURCE_DIR_NAME}/pyproject.toml" pyproject.toml
 
       - name: commit & push
         run: |
