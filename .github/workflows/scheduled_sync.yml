@@ -99,8 +99,8 @@ jobs:
           fi
 
           SYNC_FILES_OR_DIRS=(
-            ".github"
-            ".vscode"
+            ".github/"
+            ".vscode/"
             "pyproject.toml"
             "renovate.json"
             "setup.cfg"
@@ -116,6 +116,7 @@ jobs:
 
             git add --intent-to-add "${add_path}"
           done
+          rm -rfv "./${SOURCE_DIR_NAME}"
 
           if ! git diff --exit-code --quiet
           then
@@ -127,5 +128,3 @@ jobs:
 
             git push -u origin "${BRUNCH_NAME}"
           fi
-
-          rm -rfv "./${SOURCE_DIR_NAME}"
