@@ -126,6 +126,6 @@ jobs:
             fi
           done
 
-          rm -rfv "./${SOURCE_DIR_NAME}"
+          rm -rf "./${SOURCE_DIR_NAME}"
           git status
           git push -u origin "${BRUNCH_NAME}"
