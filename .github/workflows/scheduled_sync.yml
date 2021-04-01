@@ -98,8 +98,9 @@ jobs:
             git checkout -b "${BRUNCH_NAME}"
           fi
 
+          #  ".github/*"
+          # (refusing to allow a GitHub App to create or update workflow `.github/workflows/projmr/upstream` without `workflows` permission)
           SYNC_FILES_OR_DIRS=(
-            ".github/*"
             ".vscode/*"
             "pyproject.toml"
             "renovate.json"
