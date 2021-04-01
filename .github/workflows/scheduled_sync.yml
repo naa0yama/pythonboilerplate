@@ -99,8 +99,8 @@ jobs:
           fi
 
           SYNC_FILES_OR_DIRS=(
-            ".github/"
-            ".vscode/"
+            ".github/*"
+            ".vscode/*"
             "pyproject.toml"
             "renovate.json"
             "setup.cfg"
@@ -116,15 +116,16 @@ jobs:
 
             git add --intent-to-add "${add_path}"
           done
-          rm -rfv "./${SOURCE_DIR_NAME}"
 
-          if ! git diff --exit-code --quiet
-          then
-            for add_path in ${SYNC_FILES_OR_DIRS[@]}
-            do
+          rm -rf "./${SOURCE_DIR_NAME}"
+
+          for add_path in ${SYNC_FILES_OR_DIRS[@]}
+          do
+            if ! git diff --exit-code --quiet "${add_path}"
+            then
               git add "${add_path}"
               git commit -m "Config update file: ${add_path}"
-            done
+            fi
+          done
 
-            git push -u origin "${BRUNCH_NAME}"
-          fi
+          git push -u origin "${BRUNCH_NAME}"
