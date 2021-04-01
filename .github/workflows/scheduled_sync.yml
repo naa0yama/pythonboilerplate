@@ -78,21 +78,54 @@ jobs:
                                 # to fetch all git depth right from the start)
 
           # Add the repo which you forked to the remote and name it as "upstream"
+          git fetch -v
           git clone "${REPO_FORK}" "./${SOURCE_DIR_NAME}"
 
       - name: pyproject.toml merge generate
         run: |
+          set -x
           projmrcli "./${SOURCE_DIR_NAME}/pyproject.toml"
+
+      - name: checkout -b
+        run: |
+          set -x
+
+          if test -e ".git/refs/remotes/origin/${BRUNCH_NAME}"
+          then
+            git checkout -b "${BRUNCH_NAME}" "origin/${BRUNCH_NAME}"
+          else
+            git checkout -b "${BRUNCH_NAME}"
+          fi
 
       - name: commit & push
         run: |
           set -x
 
-          git checkout -b upstream-config-merge
-          git add -N pyproject.toml # 新規ファイルを含める
-          if ! git diff --exit-code --quiet
-          then
-            git add pyproject.toml
-            git commit -m "Update"
-            git push -u origin upstream-config-merge
-          fi
+          #  ".github/*"
+          # (refusing to allow a GitHub App to create or update workflow `.github/workflows/projmr/upstream` without `workflows` permission)
+          SYNC_FILES_OR_DIRS=(
+            ".vscode/*"
+            "pyproject.toml"
+            "renovate.json"
+            "setup.cfg"
+            "tox.ini"
+          )
+
+          for add_path in ${SYNC_FILES_OR_DIRS[@]}
+          do
+            if test "pyproject.toml" != "${add_path}"
+            then
+              cp -av "./${SOURCE_DIR_NAME}/${add_path}" "${add_path}"
+            fi
+            git add --intent-to-add "${add_path}"
+
+            if ! git diff --exit-code --quiet "${add_path}"
+            then
+              git add "${add_path}"
+              git commit -m "Config update file: ${add_path}"
+            fi
+          done
+
+          rm -rf "./${SOURCE_DIR_NAME}"
+          git status
+          git push -u origin "${BRUNCH_NAME}"
