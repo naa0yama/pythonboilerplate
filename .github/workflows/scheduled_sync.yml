@@ -118,7 +118,7 @@ jobs:
             git add --intent-to-add "${add_path}"
           done
 
-          rm -rf "./${SOURCE_DIR_NAME}"
+          rm -rfv "${{ github.workspace }}/.github/workflows/projmr/${SOURCE_DIR_NAME}"
 
           for add_path in ${SYNC_FILES_OR_DIRS[@]}
           do
