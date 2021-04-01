@@ -78,6 +78,7 @@ jobs:
                                 # to fetch all git depth right from the start)
 
           # Add the repo which you forked to the remote and name it as "upstream"
+          git fetch -v
           git clone "${REPO_FORK}" "./${SOURCE_DIR_NAME}"
 
       - name: pyproject.toml merge generate
@@ -85,13 +86,17 @@ jobs:
           set -x
           projmrcli "./${SOURCE_DIR_NAME}/pyproject.toml"
 
-          rm -rfv "./${SOURCE_DIR_NAME}"
-
       - name: commit & push
         run: |
           set -x
 
-          git checkout -b upstream-config-merge
+
+          if test -e ".git/refs/remotes/origin/${BRUNCH_NAME}"
+          then
+            git checkout -b "${BRUNCH_NAME}" "origin/${BRUNCH_NAME}"
+          else
+            git checkout -b "${BRUNCH_NAME}"
+          fi
 
           SYNC_FILES_OR_DIRS=(
             ".github"
@@ -104,12 +109,23 @@ jobs:
 
           for add_path in ${SYNC_FILES_OR_DIRS[@]}
           do
+            if test "pyproject.toml" != "${add_path}"
+            then
+              cp -av "./${SOURCE_DIR_NAME}/${add_path}" "${add_path}"
+            fi
+
             git add --intent-to-add "${add_path}"
           done
 
           if ! git diff --exit-code --quiet
           then
-            git add pyproject.toml
-            git commit -m "Update file(s)"
-            git push -u origin upstream-config-merge
+            for add_path in ${SYNC_FILES_OR_DIRS[@]}
+            do
+              git add "${add_path}"
+              git commit -m "Config update file: ${add_path}"
+            done
+
+            git push -u origin "${BRUNCH_NAME}"
           fi
+
+          rm -rfv "./${SOURCE_DIR_NAME}"
