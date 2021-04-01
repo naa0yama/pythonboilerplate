@@ -82,17 +82,34 @@ jobs:
 
       - name: pyproject.toml merge generate
         run: |
+          set -x
           projmrcli "./${SOURCE_DIR_NAME}/pyproject.toml"
+
+          rm -rfv "./${SOURCE_DIR_NAME}"
 
       - name: commit & push
         run: |
           set -x
 
           git checkout -b upstream-config-merge
-          git add -N pyproject.toml # 新規ファイルを含める
+
+          SYNC_FILES_OR_DIRS=(
+            ".github"
+            ".vscode"
+            "pyproject.toml"
+            "renovate.json"
+            "setup.cfg"
+            "tox.ini"
+          )
+
+          for add_path in ${SYNC_FILES_OR_DIRS[@]}
+          do
+            git add --intent-to-add "${add_path}"
+          done
+
           if ! git diff --exit-code --quiet
           then
             git add pyproject.toml
-            git commit -m "Update"
+            git commit -m "Update file(s)"
             git push -u origin upstream-config-merge
           fi
