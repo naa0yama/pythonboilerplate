@@ -129,4 +129,5 @@ jobs:
             fi
           done
 
+          git status
           git push -u origin "${BRUNCH_NAME}"
