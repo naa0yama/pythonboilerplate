@@ -86,10 +86,9 @@ jobs:
           set -x
           projmrcli "./${SOURCE_DIR_NAME}/pyproject.toml"
 
-      - name: commit & push
+      - name: checkout -b
         run: |
           set -x
-
 
           if test -e ".git/refs/remotes/origin/${BRUNCH_NAME}"
           then
@@ -97,6 +96,10 @@ jobs:
           else
             git checkout -b "${BRUNCH_NAME}"
           fi
+
+      - name: commit & push
+        run: |
+          set -x
 
           #  ".github/*"
           # (refusing to allow a GitHub App to create or update workflow `.github/workflows/projmr/upstream` without `workflows` permission)
@@ -114,14 +117,8 @@ jobs:
             then
               cp -av "./${SOURCE_DIR_NAME}/${add_path}" "${add_path}"
             fi
-
             git add --intent-to-add "${add_path}"
-          done
 
-          rm -rfv "./${SOURCE_DIR_NAME}"
-
-          for add_path in ${SYNC_FILES_OR_DIRS[@]}
-          do
             if ! git diff --exit-code --quiet "${add_path}"
             then
               git add "${add_path}"
@@ -129,5 +126,6 @@ jobs:
             fi
           done
 
+          rm -rfv "./${SOURCE_DIR_NAME}"
           git status
           git push -u origin "${BRUNCH_NAME}"
