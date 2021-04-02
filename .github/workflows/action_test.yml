@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+
+name: Composite run steps action
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - uses: actions/checkout@v2
+      - id: foo
+        uses: naa0yama/projmr-run-steps-action@v0.1.0
+        with:
+          who-to-greet: 'Mona the Octocat'
+      - run: echo random-number ${{ steps.foo.outputs.random-number }}
+        shell: bash
