@@ -26,6 +26,7 @@ on:
 
 jobs:
   merge:
+    name: Merge Job
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
