@@ -19,7 +19,16 @@ jobs:
         uses: actions/setup-python@v2.2.1
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Cache Python
+        id: python_cache_id
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ env.pythonLocation }}
+            ~/.tox
+          key: python-${{ env.pythonLocation }}-v${{ matrix.python-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/tox.ini')) }}-${{ hashFiles(format('{0}{1}', github.workspace, '/setup.cfg')) }}-${{ hashFiles(format('{0}{1}', github.workspace, '/pyproject.toml')) }}
       - name: Install dependencies
+        if: steps.python_cache_id.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install tox tox-gh-actions
