@@ -25,7 +25,7 @@ jobs:
         with:
           path: |
             ${{ env.pythonLocation }}
-            ~/.tox
+            ${{ github.workspace }}/.tox
           key: python-${{ env.pythonLocation }}-v${{ matrix.python-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/tox.ini')) }}-${{ hashFiles(format('{0}{1}', github.workspace, '/setup.cfg')) }}-${{ hashFiles(format('{0}{1}', github.workspace, '/pyproject.toml')) }}
       - name: Install dependencies
         if: steps.python_cache_id.outputs.cache-hit != 'true'
