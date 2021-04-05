@@ -41,9 +41,11 @@ jobs:
       REPO_FORK: https://github.com/naa0yama/pythonboilerplate.git
       BRUNCH_NAME: upstream-config-merge
       SOURCE_DIR_NAME: upstream
+      ORIGIN_DEFAULT_BRUNCH: main
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2.2.1
         with:
@@ -56,13 +58,7 @@ jobs:
           path: ${{ env.pythonLocation }}
           key: python-${{ env.pythonLocation }}-v${{ matrix.python-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/.github/workflows/projmr/poetry.lock')) }}
 
-      - name: Install requirements
-        if: steps.python_cache_id.outputs.cache-hit != 'true'
-        run: |
-          cd ${{ github.workspace }}/.github/workflows/projmr
-          pip install .
-
-      - name: git clone upstream
+      - name: git settings
         run: |
           set -x
 
@@ -78,25 +74,39 @@ jobs:
                                 # (but actions/checkout@v2 can also be instructed
                                 # to fetch all git depth right from the start)
 
-          # Add the repo which you forked to the remote and name it as "upstream"
-          git fetch -v
-          git clone "${REPO_FORK}" "./${SOURCE_DIR_NAME}"
-
-      - name: pyproject.toml merge generate
+      - name: git clone upstream
         run: |
           set -x
-          projmrcli "./${SOURCE_DIR_NAME}/pyproject.toml"
+
+          # Add the repo which you forked to the remote and name it as "upstream"
+          git fetch -v
+          git clone "${REPO_FORK}" "${{ github.workspace }}/${SOURCE_DIR_NAME}"
+
+      - name: Install requirements
+        if: steps.python_cache_id.outputs.cache-hit != 'true'
+        run: |
+          set -x
+
+          cd ${{ github.workspace }}/${SOURCE_DIR_NAME}/.github/workflows/projmr
+          pip install .
 
       - name: checkout -b
         run: |
           set -x
 
+          cd ${{ github.workspace }}
           if test -e ".git/refs/remotes/origin/${BRUNCH_NAME}"
           then
             git checkout -b "${BRUNCH_NAME}" "origin/${BRUNCH_NAME}"
           else
             git checkout -b "${BRUNCH_NAME}"
           fi
+
+      - name: pyproject.toml merge generate
+        run: |
+          set -x
+
+          projmrcli "${{ github.workspace }}/pyproject.toml"
 
       - name: commit & push
         run: |
@@ -114,6 +124,8 @@ jobs:
 
           for add_path in ${SYNC_FILES_OR_DIRS[@]}
           do
+            echo -e "\n\n"
+            echo "add_path: ${add_path}"
             if test "pyproject.toml" != "${add_path}"
             then
               cp -av "./${SOURCE_DIR_NAME}/${add_path}" "${add_path}"
@@ -128,7 +140,6 @@ jobs:
           done
 
           rm -rf "./${SOURCE_DIR_NAME}"
-          git status
           git push -u origin "${BRUNCH_NAME}"
 
       - name: Create PullRequest
@@ -141,8 +152,8 @@ jobs:
                 repo: context.repo.repo
             }
             const pull_params = {
-                head: "ref/head/process.env.BRUNCH_NAME,
-                base: "master",
+                head: context.repo.owner + ':' + process.env.BRUNCH_NAME,
+                base: process.env.ORIGIN_DEFAULT_BRUNCH,
                 ...common_params
             }
             const pulls_list_params = {
@@ -152,13 +163,13 @@ jobs:
             console.log("call pulls.list:")
             console.log(pulls_list_params)
 
-            // ${BRUNCH_NAME} ブランチをheadとするPRの一覧を取得する
+            // process.env.BRUNCH_NAME ブランチをheadとするPRの一覧を取得する
             github.pulls.list(pulls_list_params).then(list_res => {
                 // 該当するPRがなければPRを作成する
                 // 既にPRが立てられている場合はpushした時点でPRに反映されるので何もしなくて良い
                 if (list_res.data.length === 0) {
                     const pulls_create_params = {
-                        title: "${REPO_FORK} の差分を反映",
+                        title: "fork 元の差分を反映",
                         ...pull_params
                     }
                     console.log("call pulls.create:")
